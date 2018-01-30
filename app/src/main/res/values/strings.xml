@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Investment Advisor</string>
+    <string name="add">Add</string>
+
+    <string-array name="money_type">
+        <item>Bank Money</item>
+        <item>Guaranteed Investment</item>
+        <item>Low/Mid Risk</item>
+        <item>High Risk</item>
+    </string-array>
+</resources>
