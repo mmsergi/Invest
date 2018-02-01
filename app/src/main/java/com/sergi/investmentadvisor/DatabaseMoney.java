@@ -36,7 +36,7 @@ public class DatabaseMoney extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void createMoney(Money money) {
+    public void addMoney(Money money) {
         SQLiteDatabase db = getWritableDatabase();
 
         if (db != null) {

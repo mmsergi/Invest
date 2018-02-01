@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextDescription" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/spinnerType"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextAmount" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/addBtn"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -59,6 +59,6 @@
         android:text="@string/add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerType" />
 
 </android.support.constraint.ConstraintLayout>
