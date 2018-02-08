@@ -15,6 +15,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ListView
 import android.widget.Spinner
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
@@ -39,16 +40,28 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var typesArray: Array<String>
 
+    lateinit var listView: ListView
+
+    lateinit var moneyArray: ArrayList<Money>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        db = DatabaseMoney(this)
+        moneyArray = db.moneyData
+
+        typesArray = getResources().getStringArray(R.array.money_type)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         toolbar.title = "My money"
         setSupportActionBar(toolbar)
 
-        db = DatabaseMoney(this)
-        typesArray = getResources().getStringArray(R.array.money_type)
+        mChart = findViewById(R.id.chart)
+        listView = findViewById(R.id.listView)
+
+        val adapter = ListViewAdapter(this, moneyArray)
+        listView.setAdapter(adapter);
 
         configureChart()
     }
@@ -57,7 +70,6 @@ class MainActivity : AppCompatActivity() {
         mTfRegular = Typeface.createFromAsset(assets, "OpenSans-Regular.ttf")
         mTfLight = Typeface.createFromAsset(assets, "OpenSans-Light.ttf")
 
-        mChart = findViewById(R.id.chart)
         mChart!!.setBackgroundColor(Color.WHITE)
 
         mChart!!.setUsePercentValues(true)
@@ -104,8 +116,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setData(count: Int, range: Float) {
+        moneyArray = db.moneyData
 
-        val moneyArray = db.moneyData
         val map = HashMap<String, Float>()
 
         for (e in 0 until moneyArray.size) {
@@ -120,6 +132,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        Log.e("THE MAP", map.toString())
+
         val values = ArrayList<PieEntry>()
 
         for ((key, value) in map) {
@@ -130,7 +144,7 @@ class MainActivity : AppCompatActivity() {
             values.add(PieEntry(5.toFloat(), typesArray[i]))
         }*/
 
-        val dataSet = PieDataSet(values, "Election Results")
+        val dataSet = PieDataSet(values, "Smart Invest")
         dataSet.sliceSpace = 3f
         dataSet.selectionShift = 5f
 
@@ -149,30 +163,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun generateCenterSpannableText(): SpannableString {
 
-        val s = SpannableString("MPAndroidChart\ndeveloped by Sergi")
+        val s = SpannableString("Smart Invest\ndeveloped by Sergi")
         s.setSpan(RelativeSizeSpan(1f), 0, 14, 0)
         s.setSpan(StyleSpan(Typeface.NORMAL), 14, s.length - 15, 0)
         s.setSpan(RelativeSizeSpan(.8f), 14, s.length - 15, 0)
         s.setSpan(StyleSpan(Typeface.ITALIC), s.length - 5, s.length, 0)
         s.setSpan(ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length - 5, s.length, 0)
         return s
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
-            R.id.add -> {
-                showDialog()
-                return true
-            }
-            else -> return super.onOptionsItemSelected(item)
-        }
     }
 
     fun showDialog(){
@@ -202,11 +199,29 @@ class MainActivity : AppCompatActivity() {
 
             Log.e("FULL DB", db.moneyData.toString())
 
+            setData(4, 100f)
+
             dialog.dismiss()
 
         })
 
         dialog.show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            R.id.add -> {
+                showDialog()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
 }
