@@ -7,4 +7,5 @@
     <color name="greenBS">#5cb85c</color>
     <color name="blueBS">#428bca</color>
     <color name="redBS">#d9534f</color>
+    <color name="grey">#fafafa</color>
 </resources>

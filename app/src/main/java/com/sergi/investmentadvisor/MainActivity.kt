@@ -44,6 +44,8 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var moneyArray: ArrayList<Money>
 
+    lateinit var adapter: ListViewAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -60,17 +62,18 @@ class MainActivity : AppCompatActivity() {
         mChart = findViewById(R.id.chart)
         listView = findViewById(R.id.listView)
 
-        val adapter = ListViewAdapter(this, moneyArray)
+        adapter = ListViewAdapter(this, moneyArray)
         listView.setAdapter(adapter);
 
         configureChart()
+        updateData()
     }
 
     private fun configureChart () {
         mTfRegular = Typeface.createFromAsset(assets, "OpenSans-Regular.ttf")
         mTfLight = Typeface.createFromAsset(assets, "OpenSans-Light.ttf")
 
-        mChart!!.setBackgroundColor(Color.WHITE)
+        mChart!!.setBackgroundColor(resources.getColor(R.color.grey))
 
         mChart!!.setUsePercentValues(true)
         mChart!!.getDescription().isEnabled = false
@@ -95,8 +98,6 @@ class MainActivity : AppCompatActivity() {
         mChart!!.setRotationAngle(0f)
         mChart!!.setCenterTextOffset(0f, 0f)
 
-        setData(4, 100f)
-
         mChart!!.animateY(1400, Easing.EasingOption.EaseInOutQuad)
 
         val l = mChart!!.getLegend()
@@ -115,8 +116,15 @@ class MainActivity : AppCompatActivity() {
         mChart!!.setEntryLabelTextSize(12f)
     }
 
-    private fun setData(count: Int, range: Float) {
-        moneyArray = db.moneyData
+    private fun updateData(){
+            moneyArray = db.moneyData
+            setData()
+            //adapter.notifyDataSetChanged()
+            listView.invalidateViews()
+
+    }
+
+    private fun setData() {
 
         val map = HashMap<String, Float>()
 
@@ -132,17 +140,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        Log.e("THE MAP", map.toString())
-
         val values = ArrayList<PieEntry>()
 
         for ((key, value) in map) {
             values.add(PieEntry(value, key))
         }
-
-        /*for (i in 0 until count) {
-            values.add(PieEntry(5.toFloat(), typesArray[i]))
-        }*/
 
         val dataSet = PieDataSet(values, "Smart Invest")
         dataSet.sliceSpace = 3f
@@ -159,17 +161,6 @@ class MainActivity : AppCompatActivity() {
         mChart!!.setData(data)
 
         mChart!!.invalidate()
-    }
-
-    private fun generateCenterSpannableText(): SpannableString {
-
-        val s = SpannableString("Smart Invest\ndeveloped by Sergi")
-        s.setSpan(RelativeSizeSpan(1f), 0, 14, 0)
-        s.setSpan(StyleSpan(Typeface.NORMAL), 14, s.length - 15, 0)
-        s.setSpan(RelativeSizeSpan(.8f), 14, s.length - 15, 0)
-        s.setSpan(StyleSpan(Typeface.ITALIC), s.length - 5, s.length, 0)
-        s.setSpan(ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length - 5, s.length, 0)
-        return s
     }
 
     fun showDialog(){
@@ -197,15 +188,24 @@ class MainActivity : AppCompatActivity() {
 
             db.addMoney(money)
 
-            Log.e("FULL DB", db.moneyData.toString())
-
-            setData(4, 100f)
+            updateData()
 
             dialog.dismiss()
 
         })
 
         dialog.show()
+    }
+
+    private fun generateCenterSpannableText(): SpannableString {
+
+        val s = SpannableString("Smart Invest\ndeveloped by Sergi")
+        s.setSpan(RelativeSizeSpan(1f), 0, 14, 0)
+        s.setSpan(StyleSpan(Typeface.NORMAL), 14, s.length - 15, 0)
+        s.setSpan(RelativeSizeSpan(.8f), 14, s.length - 15, 0)
+        s.setSpan(StyleSpan(Typeface.ITALIC), s.length - 5, s.length, 0)
+        s.setSpan(ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length - 5, s.length, 0)
+        return s
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -223,5 +223,4 @@ class MainActivity : AppCompatActivity() {
             else -> return super.onOptionsItemSelected(item)
         }
     }
-
 }
