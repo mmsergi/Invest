@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
     protected lateinit var mTfRegular: Typeface
     protected lateinit var mTfLight: Typeface
 
-    lateinit var db: DatabaseMoney
 
     lateinit var typesArray: Array<String>
 
@@ -46,9 +45,16 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var adapter: ListViewAdapter
 
+    companion object {
+        lateinit var instance : MainActivity
+        lateinit var db: DatabaseMoney
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        instance = this
 
         db = DatabaseMoney(this)
         moneyArray = db.moneyData
@@ -63,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         listView = findViewById(R.id.listView)
 
         adapter = ListViewAdapter(this, moneyArray)
-        listView.setAdapter(adapter);
+        listView.setAdapter(adapter)
 
         configureChart()
         updateData()
@@ -116,12 +122,11 @@ class MainActivity : AppCompatActivity() {
         mChart!!.setEntryLabelTextSize(12f)
     }
 
-    private fun updateData(){
-            moneyArray = db.moneyData
-            setData()
-            //adapter.notifyDataSetChanged()
-            listView.invalidateViews()
-
+    fun updateData(){
+        moneyArray = db.moneyData
+        setData()
+        adapter = ListViewAdapter(this, moneyArray)
+        listView.setAdapter(adapter)
     }
 
     private fun setData() {

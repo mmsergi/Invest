@@ -6,7 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-
+import android.widget.Button
+import android.widget.ImageButton
 
 
 /**
@@ -17,6 +18,7 @@ class ListViewAdapter(context: Context, moneys: ArrayList<Money>) : ArrayAdapter
     private class ViewHolder {
         internal var description: TextView? = null
         internal var amount: TextView? = null
+        internal var deleteBtn: ImageButton? = null
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -32,6 +34,7 @@ class ListViewAdapter(context: Context, moneys: ArrayList<Money>) : ArrayAdapter
             view = inflater.inflate(R.layout.item_main_list_view, parent, false)
             viewHolder.description = view!!.findViewById(R.id.textViewDescription)
             viewHolder.amount = view.findViewById(R.id.textViewAmount)
+            viewHolder.deleteBtn = view.findViewById(R.id.deleteBtn)
             // Cache the viewHolder object inside the fresh view
             view.setTag(viewHolder)
         } else {
@@ -42,6 +45,11 @@ class ListViewAdapter(context: Context, moneys: ArrayList<Money>) : ArrayAdapter
         // into the template view.
         viewHolder.description!!.setText(money!!.type + ": " + money.name)
         viewHolder.amount!!.setText(money.amount.toString())
+        viewHolder.deleteBtn!!.setOnClickListener({
+            (MainActivity).db.deleteMoney(money)
+            (MainActivity).instance.updateData()
+        })
+
         // Return the completed view to render on screen
         return view
     }
