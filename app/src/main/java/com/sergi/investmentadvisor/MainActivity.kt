@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
     protected lateinit var mTfRegular: Typeface
     protected lateinit var mTfLight: Typeface
 
-
     lateinit var typesArray: Array<String>
 
     lateinit var listView: ListView
@@ -79,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         mTfRegular = Typeface.createFromAsset(assets, "OpenSans-Regular.ttf")
         mTfLight = Typeface.createFromAsset(assets, "OpenSans-Light.ttf")
 
-        mChart!!.setBackgroundColor(resources.getColor(R.color.grey))
+        mChart!!.setBackgroundColor(Color.TRANSPARENT)
 
         mChart!!.setUsePercentValues(true)
         mChart!!.getDescription().isEnabled = false
@@ -88,9 +87,9 @@ class MainActivity : AppCompatActivity() {
         mChart!!.setCenterText(generateCenterSpannableText())
 
         mChart!!.setDrawHoleEnabled(true)
-        mChart!!.setHoleColor(Color.WHITE)
+        mChart!!.setHoleColor(Color.TRANSPARENT)
 
-        mChart!!.setTransparentCircleColor(Color.WHITE)
+        mChart!!.setTransparentCircleColor(Color.TRANSPARENT)
         mChart!!.setTransparentCircleAlpha(0)
 
         mChart!!.setHoleRadius(45f)
@@ -98,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
         mChart!!.setDrawCenterText(true)
 
-        mChart!!.setRotationEnabled(false)
+        mChart!!.setRotationEnabled(true)
         mChart!!.setHighlightPerTapEnabled(true)
 
         mChart!!.setRotationAngle(0f)
@@ -119,7 +118,7 @@ class MainActivity : AppCompatActivity() {
         // entry label styling
         mChart!!.setEntryLabelColor(Color.WHITE)
         mChart!!.setEntryLabelTypeface(mTfRegular)
-        mChart!!.setEntryLabelTextSize(12f)
+        mChart!!.setEntryLabelTextSize(18f)
     }
 
     fun updateData(){
@@ -160,7 +159,7 @@ class MainActivity : AppCompatActivity() {
 
         val data = PieData(dataSet)
         data.setValueFormatter(PercentFormatter())
-        data.setValueTextSize(11f)
+        data.setValueTextSize(18f)
         data.setValueTextColor(Color.WHITE)
         data.setValueTypeface(mTfLight)
         mChart!!.setData(data)
