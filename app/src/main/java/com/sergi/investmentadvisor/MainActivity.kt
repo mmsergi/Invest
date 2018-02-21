@@ -25,7 +25,9 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.utils.ColorTemplate.rgb
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
@@ -83,8 +85,8 @@ class MainActivity : AppCompatActivity() {
         mChart!!.setUsePercentValues(true)
         mChart!!.getDescription().isEnabled = false
 
-        mChart!!.setCenterTextTypeface(mTfLight)
-        mChart!!.setCenterText(generateCenterSpannableText())
+        //mChart!!.setCenterTextTypeface(mTfLight)
+        //mChart!!.setCenterText(generateCenterSpannableText())
 
         mChart!!.setDrawHoleEnabled(true)
         mChart!!.setHoleColor(Color.TRANSPARENT)
@@ -131,6 +133,7 @@ class MainActivity : AppCompatActivity() {
     private fun setData() {
 
         val map = HashMap<String, Float>()
+        val arrayColors = ArrayList<Int>()
 
         for (e in 0 until moneyArray.size) {
 
@@ -144,17 +147,29 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        Collections.reverse(arrayColors)
+
         val values = ArrayList<PieEntry>()
 
         for ((key, value) in map) {
             values.add(PieEntry(value, key))
+
+            if (key.equals(typesArray[0])) {
+                arrayColors.add(rgb("#2ecc71")) //green
+            } else if (key.equals(typesArray[1])) {
+                arrayColors.add(rgb("#3498db")) //blue
+            } else if (key.equals(typesArray[2])) {
+                arrayColors.add(rgb("#f1c40f")) //yellow
+            } else if (key.equals(typesArray[3])) {
+                arrayColors.add(rgb("#e74c3c")) //red
+            }
         }
 
         val dataSet = PieDataSet(values, "Smart Invest")
         dataSet.sliceSpace = 3f
         dataSet.selectionShift = 5f
 
-        dataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
+        dataSet.setColors(arrayColors)
         //dataSet.setSelectionShift(0f);
 
         val data = PieData(dataSet)
